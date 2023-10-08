@@ -30,8 +30,11 @@ module FlightRadar
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.autoload_paths << "#{Rails.root}/lib"
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
   end
 end
