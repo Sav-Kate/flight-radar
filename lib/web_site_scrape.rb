@@ -14,7 +14,10 @@ class WebSiteScrape
 
             flight_page_document = Nokogiri::HTML(@driver.page_source)
 
-            flight_distance = flight_page_document.css("#flight-info").css("#content > div:nth-child(3)").css("#value").text.gsub("NM", "").strip
+            flight_distance = flight_page_document
+                                            .css("#flight-info")
+                                            .css("#content > div:nth-child(3)")
+                                            .css("#value").text.gsub("NM", "").strip
             departure_city = airport_city_info(flight_page_document, "origin")
             arrival_city = airport_city_info(flight_page_document, "destination")
 
