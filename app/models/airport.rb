@@ -1,4 +1,6 @@
 class Airport < ApplicationRecord
+    validates :iata, presence: true, uniqueness: true, format: { with: Regex.valid_iata }
+
     has_many :departure_flight_legs, :class_name => 'FlightLeg', :foreign_key => 'departure_airport_id'
     has_many :arrival_flight_legs, :class_name => 'FlightLeg', :foreign_key => 'arrival_airport_id'
 

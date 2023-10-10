@@ -1,5 +1,5 @@
 class Flight < ApplicationRecord
-    validates :number, presence: true, uniqueness: true
+    validates :number, presence: true, uniqueness: true, format: { with: Regex.valid_flight_number }
 
     has_many :flight_legs
     has_many :departure_airports, through: :flight_legs
