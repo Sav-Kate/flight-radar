@@ -46,7 +46,9 @@ class WebSiteScrape
                 status: "FAIL",
                 distance: 0,
                 error_message: exception.message
-            }                
+            }
+        ensure
+            @driver.quit                
         end
         response_data   
     end
