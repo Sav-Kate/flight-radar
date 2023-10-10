@@ -24,7 +24,7 @@ class FlightNumberUtility
     private
 
     def is_flight_number_valid?(flight_number)
-        /^[a-zA-Z0-9]{2,3}[0-9]{1,4}$/.match?(flight_number) ? true : false
+        Regex.valid_flight_number.match?(flight_number) ? true : false
     end
 
     def remove_white_spaces(flight_number)

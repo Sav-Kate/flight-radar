@@ -1,6 +1,6 @@
 class FlightRadarController < ApplicationController
   def flight_route
-    flight_number = params[:flight_number]
+    flight_number = params[:flight_number].upcase
     flight = find_flight_in_db(flight_number)
 
     if flight
