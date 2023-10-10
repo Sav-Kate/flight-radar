@@ -30,16 +30,32 @@ class WebSiteScrape
             departure_airport_data[:city] = departure_city
             arrival_airport_data[:city] = arrival_city
 
-            response_data = {
-                route: {
-                    departure: departure_airport_data,
-                    arrival: arrival_airport_data
-                },
-                    status: "OK",
-                    distance: flight_distance,
-                    error_message: nil
+            if is_flight_multi_leg?
+                #TODO: multi leg
+                # response_data = {
+                #     route:
+                #     [
+                #         {
+                #             departure: "",
+                #             arrival: ""
+                #         }
+                #     ],
+                #         status: "",
+                #         distance: "",
+                #         error_message: ""
+                # }
+            else
+                response_data = {
+                    route: 
+                    {
+                        departure: departure_airport_data,
+                        arrival: arrival_airport_data
+                    },
+                        status: "OK",
+                        distance: flight_distance,
+                        error_message: nil
                 }
-            
+            end
         rescue => exception
             response_data = {
                 route: nil,
@@ -150,5 +166,10 @@ class WebSiteScrape
 
     def check_if_valid_flight_numbers_exist(flight_numbers)
         raise "Invalid flight number" if flight_numbers.empty?
+    end
+
+    def is_flight_multi_leg?
+        #TODO: multi leg
+        false
     end
 end
