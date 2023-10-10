@@ -1,0 +1,3 @@
+class FlightLeg < ApplicationRecord
+    
+end
