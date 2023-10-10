@@ -2,7 +2,7 @@ class FlightResponseBuilder
     def self.build_flight_information(flight)
         response = 
         {
-            route: build_route_info(flight.flight_legs),
+            route: build_route_info(flight.flight_legs, flight),
             status: "OK",
             distance: flight.distance,
             error_message: nil
