@@ -52,7 +52,7 @@ class WebSiteScrape
                         arrival: arrival_airport_data
                     },
                         status: "OK",
-                        distance: flight_distance,
+                        distance: convert_distance_to_km(flight_distance),
                         error_message: nil
                 }
             end
@@ -166,6 +166,10 @@ class WebSiteScrape
 
     def check_if_valid_flight_numbers_exist(flight_numbers)
         raise "Invalid flight number" if flight_numbers.empty?
+    end
+
+    def convert_distance_to_km(distance)
+        (distance.to_f * 1.852).round(2)
     end
 
     def is_flight_multi_leg?
