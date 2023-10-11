@@ -92,7 +92,7 @@ class WebSiteScrape
         raise "There are no flights with the provided flight number" if !fligh_exist
 
         @driver.find_element(:xpath, '//*[@id="content"]/ul/div/ul/li').click
-        flight_page_link = @driver.find_element(:xpath, '//*[@id="content"]/ul/div/ul/li/div[2]/ul/li[1]/a').attribute("href")
+        flight_page_link = @driver.find_element(:xpath, "//*[text()='Flight Page']").attribute("href")
         @driver.navigate.to(flight_page_link)
     end
 
