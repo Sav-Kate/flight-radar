@@ -4,6 +4,7 @@ class FlightResponseBuilder
         {
             route: build_route_info(flight.flight_legs, flight),
             status: "OK",
+            used_flight_number: flight.number,
             distance: flight.distance,
             error_message: nil
         }

@@ -1,16 +1,14 @@
 class WebSiteScrape
     WEB_SITE_ADDRESS = "https://www.radarbox.com"
 
-    def parse_information_from_website(flight_number)
+    def parse_information_from_website(flight_numbers)
         begin
             @driver = create_driver
 
             open_flight_radar_website
-
-            flight_numbers = valid_flight_numbers(flight_number)
-            check_if_valid_flight_numbers_exist(flight_numbers)
-
-            open_flight_page(flight_numbers)
+            check_if_flight_numbers_exist(flight_numbers)
+            existing_flight_number = existing_flight_number(flight_numbers)
+            open_flight_page
 
             flight_page_document = Nokogiri::HTML(@driver.page_source)
 
@@ -51,15 +49,17 @@ class WebSiteScrape
                         departure: departure_airport_data,
                         arrival: arrival_airport_data
                     },
-                        status: "OK",
-                        distance: convert_distance_to_km(flight_distance),
-                        error_message: nil
+                    status: "OK",
+                    used_flight_number: existing_flight_number,
+                    distance: convert_distance_to_km(flight_distance),
+                    error_message: nil
                 }
             end
         rescue => exception
             response_data = {
                 route: nil,
                 status: "FAIL",
+                used_flight_number: flight_numbers.size > 1 ? flight_numbers :  flight_numbers[0],
                 distance: 0,
                 error_message: exception.message
             }
@@ -75,31 +75,25 @@ class WebSiteScrape
         @driver.navigate.to(request_link)
     end
 
-    def open_flight_page(flight_numbers)
+    def existing_flight_number(flight_numbers)
         @driver.find_element(:xpath, '//*[@id="search"]').click
-
-        fligh_exist = false
 
         flight_numbers.each do |flight_number|
             @driver.find_element(:xpath, '//*[@id="input-container"]/input').send_keys(flight_number)
             sleep 3
-            if is_element_present?('//*[@id="content"]/ul/div/ul/li')
-                fligh_exist = true
-                break
+            if is_element_present?('//*[@id="content"]/ul/div/ul/li')# && !is_element_present?("//*[text()='STATUS N/A']")
+                return flight_number
             end
         end
+        
 
-        raise "There are no flights with the provided flight number" if !fligh_exist
+        raise "There are no flights with the provided flight number"
+    end
 
+    def open_flight_page
         @driver.find_element(:xpath, '//*[@id="content"]/ul/div/ul/li').click
         flight_page_link = @driver.find_element(:xpath, "//*[text()='Flight Page']").attribute("href")
         @driver.navigate.to(flight_page_link)
-    end
-
-    def valid_flight_numbers(flight_number)
-        flight_number_utility = FlightNumberUtility.new
-
-        flight_number_utility.valid_flight_numbers(flight_number)
     end
 
     def airport_info_parse(page_to_scrape)
@@ -164,7 +158,7 @@ class WebSiteScrape
         @driver.find_elements(:xpath, xpath).size() > 0 ? true : false
     end
 
-    def check_if_valid_flight_numbers_exist(flight_numbers)
+    def check_if_flight_numbers_exist(flight_numbers)
         raise "Invalid flight number" if flight_numbers.empty?
     end
 
