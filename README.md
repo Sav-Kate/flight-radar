@@ -1,24 +1,39 @@
-# README
+## General info
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The app has one API '/flight_route/:flight_number', that accepts a flight_number of string type and finds a flight's route information based on it.
 
-Things you may want to cover:
+Output is a hash in a JSON format.
 
-* Ruby version
+In case the flight is found, the response of API is:
+{
+  route: {
+    departure: {iata: 'XXX', city: 'YYY', country: 'ZZZ', latitude: 12.34, longitude: 56.78},
+    arrival: {iata: 'AAA', city: ..., country: .... }
+    },
+  status: 'OK',
+  distance: '1234' # kilometers between first departure airport & last arrival airport
+  error_message: nil
+}
 
-* System dependencies
+In case the flight is NOT found, the response of API is:
+{
+  route: nil,
+  status: 'FAIL',
+  distance: 0,
+  error_message: description of what went wrong
+}
 
-* Configuration
 
-* Database creation
+File script.rb is a script, that takes the path and name of a CSV file and fills it with flight information.
 
-* Database initialization
+## Setup
 
-* How to run the test suite
+1. Clone this repo
+2. Install ruby v3.0.0
+3. Run bundle install
 
-* Services (job queues, cache servers, search engines, etc.)
+## Usage
 
-* Deployment instructions
+To fill in a CSV file run script and provide the file path and name:
+ruby script.rb
 
-* ...
