@@ -76,11 +76,15 @@ class WebSiteScrape
         @driver.navigate.to(request_link)
     end
 
-    def existing_flight_number(flight_numbers)
-        @driver.find_element(:xpath, '//*[@id="search"]').click
+    def existing_flight_number(flight_numbers)         
+        while is_element_present?('//*[@id="input-container"]/input') == false
+            @driver.find_element(:xpath, '//*[@id="search"]').click
+        end
+
+        input_element = @driver.find_element(:xpath, '//*[@id="input-container"]/input')
 
         flight_numbers.each do |flight_number|
-            @driver.find_element(:xpath, '//*[@id="input-container"]/input').send_keys(flight_number)
+            input_element.send_keys(flight_number)
             sleep 3
             if is_element_present?('//*[@id="content"]/ul/div/ul/li')
                 return flight_number

@@ -11,8 +11,11 @@ class FlightRadarController < ApplicationController
       response = find_flight_by_scrape(valid_flight_numbers)
 
       unless response[:error_message]
-        flight = Flight.create!(number: response[:used_flight_number], distance: response[:distance])
-        FlightLegAndAirportCreator.call!(response[:route], flight)
+        begin
+          flight = Flight.create!(number: response[:used_flight_number], distance: response[:distance])
+          FlightLegAndAirportCreator.call!(response[:route], flight)
+        rescue
+        end
       end  
     end
 
