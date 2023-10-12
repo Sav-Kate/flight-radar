@@ -1,9 +1,9 @@
 class FlightRadarController < ApplicationController
   def flight_route
     passed_flight_number = params[:flight_number].upcase
-    valid_flight_numbers = FlightNumberUtility.new.valid_flight_numbers(passed_flight_number)
+    valid_flight_numbers = FlightNumberUtility.new.check_valid_flight_numbers(passed_flight_number)
   
-    flight = find_flight_in_db(valid_flight_numbers)
+    flight = find_flight_in_db(valid_flight_numbers[:valid_flight_numbers])
 
     if flight
       response = FlightResponseBuilder.build_flight_information(flight)

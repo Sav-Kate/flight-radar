@@ -6,8 +6,8 @@ class WebSiteScrape
             @driver = create_driver
 
             open_flight_radar_website
-            check_if_flight_numbers_exist(flight_numbers)
-            existing_flight_number = existing_flight_number(flight_numbers)
+            check_if_flight_numbers_exist(flight_numbers[:valid_flight_numbers])
+            existing_flight_number = existing_flight_number(flight_numbers[:valid_flight_numbers])
             open_flight_page
 
             flight_page_document = Nokogiri::HTML(@driver.page_source)
@@ -59,7 +59,8 @@ class WebSiteScrape
             response_data = {
                 route: nil,
                 status: "FAIL",
-                used_flight_number: flight_numbers.size > 1 ? flight_numbers :  flight_numbers[0],
+                used_flight_number: flight_numbers[:valid_flight_numbers].size > 1 ? 
+                flight_numbers[:valid_flight_numbers] :  flight_numbers[:origin_flight_number],
                 distance: 0,
                 error_message: exception.message
             }
@@ -81,7 +82,7 @@ class WebSiteScrape
         flight_numbers.each do |flight_number|
             @driver.find_element(:xpath, '//*[@id="input-container"]/input').send_keys(flight_number)
             sleep 3
-            if is_element_present?('//*[@id="content"]/ul/div/ul/li')# && !is_element_present?("//*[text()='STATUS N/A']")
+            if is_element_present?('//*[@id="content"]/ul/div/ul/li')
                 return flight_number
             end
         end

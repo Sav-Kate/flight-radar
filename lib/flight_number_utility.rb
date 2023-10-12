@@ -1,7 +1,11 @@
 class FlightNumberUtility
-    def valid_flight_numbers(flight_number)
+    def check_valid_flight_numbers(flight_number)
         if is_flight_number_valid?(flight_number)
-            return [flight_number]
+            response = {
+                valid_flight_numbers: [flight_number],
+                origin_flight_number: flight_number
+            }
+            return response
         end
         
         valid_flight_numbers_array = []
@@ -18,7 +22,10 @@ class FlightNumberUtility
             numbers_with_zero = add_zero_to_flight_number(formatted_number)
             valid_flight_numbers_array.concat(numbers_with_zero)
         end
-        valid_flight_numbers_array.uniq
+        {
+            valid_flight_numbers: valid_flight_numbers_array.uniq,
+            origin_flight_number: flight_number
+        }
     end
 
     private

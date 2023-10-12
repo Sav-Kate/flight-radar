@@ -36,7 +36,7 @@ RSpec.describe "FlightRadars", type: :request do
           {
             "route"=>nil,
             "status"=>"FAIL",
-            "used_flight_number"=>nil,
+            "used_flight_number"=>"HHHH123",
             "distance"=>0,
             "error_message"=>"Invalid flight number"
           }
