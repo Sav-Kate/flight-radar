@@ -15,7 +15,7 @@ flight_rows = CSV.read(file_path, headers:true, skip_blanks: true)
 
 pages_to_scrape = flight_rows.map do |flight_row|
     next unless flight_row["Example flight number"]
-    flight_number = URI.encode(flight_row["Example flight number"].gsub(/\s/, ""))
+    flight_number = CGI.escape(flight_row["Example flight number"].gsub(/\s/, ""))
     {
         "row" => flight_row,
         "Link" => "http://localhost:3000/flight_route/#{flight_number}"
