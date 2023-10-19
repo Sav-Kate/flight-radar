@@ -3,10 +3,11 @@ class WebSiteScrape
 
     def parse_information_from_website(flight_numbers)
         begin
+            check_if_flight_numbers_exist(flight_numbers[:valid_flight_numbers])
+
             @driver = create_driver
 
             open_flight_radar_website
-            check_if_flight_numbers_exist(flight_numbers[:valid_flight_numbers])
             existing_flight_number = existing_flight_number(flight_numbers[:valid_flight_numbers])
             open_flight_page
 
@@ -65,7 +66,7 @@ class WebSiteScrape
                 error_message: exception.message
             }
         ensure
-            @driver.quit                
+            @driver&.quit
         end
         response_data   
     end
@@ -160,7 +161,7 @@ class WebSiteScrape
     end
 
     def is_element_present?(xpath)
-        @driver.find_elements(:xpath, xpath).size() > 0 ? true : false
+        @driver.find_elements(:xpath, xpath).size > 0 ? true : false
     end
 
     def check_if_flight_numbers_exist(flight_numbers)
